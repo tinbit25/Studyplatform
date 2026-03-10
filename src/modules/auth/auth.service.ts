@@ -12,18 +12,14 @@ export class AuthService {
     private userModel: Model<User>,
   ) {}
 async register(data: any) {
-  console.log("Before save");
+  const hashedPassword = await argon2.hash(data.password);
 
   const user = new this.userModel({
     name: data.name,
     email: data.email,
-    password: data.password,
+    password: hashedPassword,
   });
 
-  const savedUser = await user.save();
-
-  console.log("After save");
-
-  return savedUser;
+  return user.save();
 }
 }

@@ -22,4 +22,23 @@ async register(data: any) {
 
   return user.save();
 }
+async login(data: any) {
+  const user = await this.userModel.findOne({ email: data.email });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const valid = await argon2.verify(user.password, data.password);
+
+  if (!valid) {
+    throw new Error("Invalid password");
+  }
+
+  return {
+    message: "Login successful",
+    user
+  };
+}
+
 }

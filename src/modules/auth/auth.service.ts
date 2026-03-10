@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
 import * as argon2 from 'argon2';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -10,35 +11,37 @@ export class AuthService {
   constructor(
     @InjectModel(User.name)
     private userModel: Model<User>,
+    private jwtService: JwtService,
   ) {}
-async register(data: any) {
-  const hashedPassword = await argon2.hash(data.password);
 
-  const user = new this.userModel({
-    name: data.name,
-    email: data.email,
-    password: hashedPassword,
-  });
+  async register(data: any) {
+    const hashedPassword = await argon2.hash(data.password);
 
-  return user.save();
-}
-async login(data: any) {
-  const user = await this.userModel.findOne({ email: data.email });
+    const user = new this.userModel({
+      name: data.name,
+      email: data.email,
+      password: hashedPassword,
+    });
 
-  if (!user) {
-    throw new Error("User not found");
+    return user.save();
   }
 
-  const valid = await argon2.verify(user.password, data.password);
+  async login(data: any) {
+    const user = await this.userModel.findOne({ email: data.email });
 
-  if (!valid) {
-    throw new Error("Invalid password");
+    if (!user) throw new Error("User not found");
+
+    const valid = await argon2.verify(user.password, data.password);
+
+    if (!valid) throw new Error("Invalid password");
+
+    const token = this.jwtService.sign({
+      sub: user._id,
+      email: user.email,
+    });
+
+    return {
+      access_token: token,
+    };
   }
-
-  return {
-    message: "Login successful",
-    user
-  };
-}
-
 }

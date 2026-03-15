@@ -6,13 +6,15 @@ import { AppService } from './modules/app/app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module'; 
 import { ProfilingModule } from './modules/profiling/profiling.module'; 
+import { EventsModule } from './modules/events/events.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGO_URI as string),
     AuthModule,
     UsersModule,
-    ProfilingModule, 
+    ProfilingModule,
+    EventsModule, 
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -12,7 +12,7 @@ export class UsersService {
     const existing = await this.userModel.findOne({ email: userData.email });
     if (existing) throw new ConflictException('Email already exists');
 
-    // Argon2 hashing per security requirements 
+
     const hashedPassword = await argon2.hash(userData.password);
     
     const newUser = new this.userModel({

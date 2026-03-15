@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UseGuards, Req, Get } from '@nestjs/common';
 import { ProfilingService } from './profiling.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard'; // From your Auth part
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('profiling')
 @UseGuards(JwtAuthGuard) // Protects these routes

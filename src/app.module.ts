@@ -4,15 +4,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './modules/app/app.controller';
 import { AppService } from './modules/app/app.service';
 import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/users/users.module'; // Add this
-import { ProfilingModule } from './modules/profiling/profiling.module'; // Add this
+import { UsersModule } from './modules/users/users.module'; 
+import { ProfilingModule } from './modules/profiling/profiling.module'; 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGO_URI as string),
     AuthModule,
     UsersModule,
-    ProfilingModule, // Register it here
+    ProfilingModule, 
   ],
   controllers: [AppController],
   providers: [AppService],

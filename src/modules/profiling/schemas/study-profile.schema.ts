@@ -7,14 +7,13 @@ export class StudyProfile extends Document {
   userId: Types.ObjectId; // Link to User entity
 
   @Prop({ required: true })
-  learningStyle: string; // e.g., Visual, Auditory
-
+  learningStyle: string; 
   @Prop({ type: [String] })
   interests: string[];
 
   @Prop({ type: Object })
   availability: {
-    weekdays: number; // hours
+    weekdays: number; 
     weekends: number;
   };
 }

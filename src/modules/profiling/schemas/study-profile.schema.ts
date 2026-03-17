@@ -16,6 +16,8 @@ export class StudyProfile extends Document {
     weekdays: number; 
     weekends: number;
   };
+  @Prop({ type: Types.ObjectId, ref: 'Field' })
+selectedFieldId: Types.ObjectId;
 }
 
 export const StudyProfileSchema = SchemaFactory.createForClass(StudyProfile);

@@ -9,6 +9,7 @@ import { ProfilingModule } from './modules/profiling/profiling.module';
 import { EventsModule } from './modules/events/events.module';
 import { QuizModule } from './modules/quiz/quiz.module';
 import { FieldsModule } from './modules/fields/fields.module';
+import { CoursesModule } from './modules/courses/courses.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -18,7 +19,8 @@ import { FieldsModule } from './modules/fields/fields.module';
     ProfilingModule,
     EventsModule,
     QuizModule,
-    FieldsModule, 
+    FieldsModule,
+    CoursesModule, 
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,17 +1,17 @@
-import { Controller, Post, Get, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param } from '@nestjs/common';
 import { CoursesService } from './courses.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CreateCourseDto } from './dto/create-course.dto';
 
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  @Post() // Admin creates a course
-  async create(@Body() body: { title: string, fieldId: string, description: string }) {
-    return this.coursesService.create(body);
+  @Post()
+  async create(@Body() createCourseDto: CreateCourseDto) {
+    return this.coursesService.create(createCourseDto);
   }
 
-  @Get('field/:fieldId') // User views courses in their chosen field
+  @Get('field/:fieldId')
   async getByField(@Param('fieldId') fieldId: string) {
     return this.coursesService.findByField(fieldId);
   }

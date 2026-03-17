@@ -11,6 +11,7 @@ import { QuizModule } from './modules/quiz/quiz.module';
 import { FieldsModule } from './modules/fields/fields.module';
 import { CoursesModule } from './modules/courses/courses.module';
 import { ChaptersModule } from './modules/chapters/chapters.module';
+import { AssessmentModule } from './modules/assessment/assessment.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -22,7 +23,8 @@ import { ChaptersModule } from './modules/chapters/chapters.module';
     QuizModule,
     FieldsModule,
     CoursesModule,
-    ChaptersModule, 
+    ChaptersModule,
+    AssessmentModule, 
   ],
   controllers: [AppController],
   providers: [AppService],

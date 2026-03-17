@@ -7,6 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module'; 
 import { ProfilingModule } from './modules/profiling/profiling.module'; 
 import { EventsModule } from './modules/events/events.module';
+import { QuizModule } from './modules/quiz/quiz.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -14,7 +15,8 @@ import { EventsModule } from './modules/events/events.module';
     AuthModule,
     UsersModule,
     ProfilingModule,
-    EventsModule, 
+    EventsModule,
+    QuizModule, 
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -9,7 +9,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class FieldsController {
   constructor(private readonly fieldsService: FieldsService) {}
 
-  @Post() // This is the missing piece that handles the POST request
+  @Post() 
   async create(@Body() body: { name: string, description: string }) {
     return this.fieldsService.createField(body);
   }
@@ -18,7 +18,7 @@ export class FieldsController {
   async findAll() {
     return this.fieldsService.getAllFields();
   }
-  // src/modules/fields/fields.controller.ts
+  
 
 @Get(':fieldId')
 async getFieldDetails(@Param('fieldId') fieldId: string) {
@@ -26,7 +26,7 @@ async getFieldDetails(@Param('fieldId') fieldId: string) {
 }
 @Post('select')
 @UseGuards(JwtAuthGuard)
-// Make sure it's @Request() req, NOT Request (the class)
+
 async selectField(@Request() req: any, @Body('fieldId') fieldId: string) { 
   if (!fieldId) throw new BadRequestException('fieldId is required');
   return this.fieldsService.selectField(req.user.userId, fieldId);

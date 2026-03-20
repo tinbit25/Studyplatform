@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from '../users/schemas/user.schema'; //
+import { User } from '../users/schemas/user.schema'; 
 import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 
@@ -14,10 +14,9 @@ export class AuthService {
 
   async refreshToken(oldRefreshToken: string) {
     try {
-      // 1. Verify the old refresh token
+    
       const payload = this.jwtService.verify(oldRefreshToken);
       
-      // 2. Generate a fresh access token using payload data
       const newAccessToken = this.jwtService.sign({ 
         email: payload.email, 
         sub: payload.sub 
@@ -33,7 +32,7 @@ export class AuthService {
   }
 
   async register(data: any) {
-    const hashedPassword = await argon2.hash(data.password); //
+    const hashedPassword = await argon2.hash(data.password); 
     const user = new this.userModel({
       ...data,
       password: hashedPassword,

@@ -5,7 +5,7 @@ export class CreateCourseDto {
   @IsNotEmpty()
   title: string;
 
-  @IsMongoId() // Ensures it's a valid MongoDB ID
+  @IsMongoId() 
   @IsNotEmpty()
   fieldId: string;
 

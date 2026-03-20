@@ -22,7 +22,7 @@ export class UsersService {
     return newUser.save();
   }
 
-  // Inside class UsersService
+
 // 1. Find a user by ID
 async findOne(userId: string) {
   return this.userModel.findById(userId).exec(); 

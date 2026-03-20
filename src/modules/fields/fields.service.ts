@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common'; // Fixes NotFoundException
-import { UsersService } from '../users/users.service'; // Adjust path as needed
+import { Injectable, NotFoundException } from '@nestjs/common'; 
+import { UsersService } from '../users/users.service'; 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Field } from './schemas/field.schema';
@@ -8,7 +8,7 @@ import { Field } from './schemas/field.schema';
 export class FieldsService {
   constructor(
     @InjectModel(Field.name) private fieldModel: Model<Field>,
-    private usersService: UsersService, // <--- Add this line to fix the error
+    private usersService: UsersService, 
   ) {}
 
   async createField(data: any) {
@@ -25,13 +25,11 @@ export class FieldsService {
   return field;
 }
 
-// This method will be used by the controller to link the user to the field
+
 async selectField(userId: string, fieldId: string) {
-  // First, verify the field actually exists
+ 
   const field = await this.findOne(fieldId);
-  
-  // We update the User document with this fieldId
-  // You'll need to inject UsersService or use the User model here
+ 
   return this.usersService.update(userId, { fieldId: field._id });
 }
 }

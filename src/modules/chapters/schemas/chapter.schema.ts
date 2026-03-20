@@ -17,8 +17,8 @@ export class Chapter extends Document {
       {
         contentType: { type: String, enum: ['video', 'note', 'quiz'], required: true },
         title: String,
-        url: String,   // For video links
-        body: String,  // For markdown text notes
+        url: String,   
+        body: String,  
       },
     ],
   })

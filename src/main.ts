@@ -13,7 +13,7 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
 
-  // 1. Ensure Uploads Directory exists at Root
+
   const uploadPath = join(process.cwd(), 'uploads');
   if (!fs.existsSync(uploadPath)) {
     fs.mkdirSync(uploadPath, { recursive: true });

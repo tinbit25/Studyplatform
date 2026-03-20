@@ -9,24 +9,20 @@ export class ChaptersService {
     @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
   ) {}
 
-  // POST /chapters?courseId=...
   async create(courseId: string, data: any) {
     return this.chapterModel.create({ ...data, courseId });
   }
 
-  // GET /chapters?courseId=...
   async findByCourse(courseId: string) {
     return this.chapterModel.find({ courseId }).sort({ order: 1 }).exec();
   }
 
-  // GET /chapters/:chapterId
   async findOne(id: string) {
     const chapter = await this.chapterModel.findById(id).populate('courseId', 'title').exec();
     if (!chapter) throw new NotFoundException('Chapter not found');
     return chapter;
   }
 
-  // src/modules/chapters/chapters.service.ts
 async addContent(chapterId: string, contentData: any) {
   const updated = await this.chapterModel.findByIdAndUpdate(
     chapterId,

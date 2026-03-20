@@ -6,7 +6,7 @@ export class CreateChapterDto {
   title: string;
 
   @IsNotEmpty()
-  // ⚡ This Regex replaces @IsMongoId() and forces a strict 24-character check
+
   @Matches(/^[0-9a-fA-F]{24}$/, {
     message: 'courseId must be a valid 24-character hexadecimal string',
   })

@@ -7,7 +7,7 @@ import { ProfilingModule } from '../profiling/profiling.module';
 @Module({
  imports: [
     MongooseModule.forFeature([{ name: Course.name, schema: CourseSchema }]),
-    forwardRef(() => ProfilingModule), // index [1]
+    forwardRef(() => ProfilingModule), 
   ],
   controllers: [CoursesController],
   providers: [CoursesService],

@@ -10,7 +10,7 @@ export class ProfilingController {
 @UseGuards(JwtAuthGuard)
 async handleProfile(@Request() req, @Body() body: any) {
   const userId = req.user.userId;
-  // ⚡ CHANGE THIS: Call createOrUpdate instead of createProfile
+ 
   return this.profilingService.createOrUpdate(userId, body);
 }
   @Get('me')

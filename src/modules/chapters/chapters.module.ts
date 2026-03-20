@@ -3,8 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ChaptersController } from './chapters.controller';
 import { ChaptersService } from './chapters.service';
 import { Chapter, ChapterSchema } from './schemas/chapter.schema';
-import { Course, CourseSchema } from '../courses/schemas/course.schema'; // 1. Import Course Schema
-import { ProfilingModule } from '../profiling/profiling.module'; // 2. Import ProfilingModule
+import { Course, CourseSchema } from '../courses/schemas/course.schema'; 
+import { ProfilingModule } from '../profiling/profiling.module'; 
 @Module({
   imports: [
    MongooseModule.forFeature([

@@ -17,7 +17,6 @@ export class StudyProfile extends Document {
     weekends: number;
   };
 
-  // Change 'selectedFieldId' to 'fieldId' to match your populate() call
   @Prop({ type: Types.ObjectId, ref: 'Field', required: true })
   fieldId: Types.ObjectId; 
 }

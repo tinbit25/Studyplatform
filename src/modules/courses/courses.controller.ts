@@ -6,7 +6,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  // 1. Create Course: POST /courses?fieldId=...
+ 
   @Post()
   @UseGuards(JwtAuthGuard)
   async create(
@@ -16,13 +16,11 @@ export class CoursesController {
     return this.coursesService.create(fieldId, data);
   }
 
-  // 2. Get Courses by Field: GET /courses?fieldId=...
   @Get()
   async getByField(@Query('fieldId') fieldId: string) {
     return this.coursesService.findByField(fieldId);
   }
 
-  // 3. Get Course Details: GET /courses/:courseId
   @Get(':courseId')
   async getDetails(@Param('courseId') courseId: string) {
     return this.coursesService.findOne(courseId);

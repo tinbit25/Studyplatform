@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EventsService } from './events.service';
 import { EventLog, EventLogSchema } from './schemas/event.schema';
 
-@Global() // Makes EventsService available everywhere
+@Global() 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: EventLog.name, schema: EventLogSchema }]),

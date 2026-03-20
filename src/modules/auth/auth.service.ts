@@ -1,42 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from './schemas/user.schema';
+import { User } from '../users/schemas/user.schema'; //
 import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
-import { UnauthorizedException } from '@nestjs/common'; 
+
 @Injectable()
 export class AuthService {
-
   constructor(
-    @InjectModel(User.name)
-    private userModel: Model<User>,
+    @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
   ) {}
 
-  async register(data: any) {
-    const hashedPassword = await argon2.hash(data.password);
+  async refreshToken(oldRefreshToken: string) {
+    try {
+      // 1. Verify the old refresh token
+      const payload = this.jwtService.verify(oldRefreshToken);
+      
+      // 2. Generate a fresh access token using payload data
+      const newAccessToken = this.jwtService.sign({ 
+        email: payload.email, 
+        sub: payload.sub 
+      });
 
+      return {
+        accessToken: newAccessToken,
+        refreshToken: oldRefreshToken
+      };
+    } catch (e) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+  }
+
+  async register(data: any) {
+    const hashedPassword = await argon2.hash(data.password); //
     const user = new this.userModel({
-      name: data.name,
-      email: data.email,
+      ...data,
       password: hashedPassword,
     });
-
     return user.save();
   }
 
   async login(data: any) {
     const user = await this.userModel.findOne({ email: data.email });
+    if (!user) throw new UnauthorizedException('User not found');
 
-    if (!user) { throw new UnauthorizedException('User not found'); } const valid = await argon2.verify(user.password, data.password); if (!valid) { throw new UnauthorizedException('Invalid password'); } 
+    const valid = await argon2.verify(user.password, data.password);
+    if (!valid) throw new UnauthorizedException('Invalid password');
+
     const token = this.jwtService.sign({
       sub: user._id,
       email: user.email,
     });
 
-    return {
-      access_token: token,
-    };
+    return { access_token: token };
   }
 }

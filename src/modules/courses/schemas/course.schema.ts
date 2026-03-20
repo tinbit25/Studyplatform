@@ -6,8 +6,8 @@ export class Course extends Document {
   @Prop({ required: true })
   title: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Field', required: true })
-  fieldId: Types.ObjectId; // The parent Field
+  @Prop({ type: Types.ObjectId, ref: 'Field', required: true, index: true })
+  fieldId: Types.ObjectId;
 
   @Prop()
   description: string;

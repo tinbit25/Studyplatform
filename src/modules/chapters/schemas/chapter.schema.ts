@@ -6,11 +6,11 @@ export class Chapter extends Document {
   @Prop({ required: true })
   title: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Course', required: true })
+  @Prop({ type: Types.ObjectId, ref: 'Course', required: true, index: true })
   courseId: Types.ObjectId;
 
   @Prop({ default: 0 })
-  order: number; // For sequence (Chapter 1, 2, 3...)
+  order: number;
 
   @Prop({
     type: [

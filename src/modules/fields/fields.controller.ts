@@ -1,4 +1,7 @@
-import { Controller, Post, Get, Body, UseGuards } from '@nestjs/common';
+import { 
+  Controller, Post, Get, Body, Param, 
+  UseGuards, Request, BadRequestException 
+} from '@nestjs/common';
 import { FieldsService } from './fields.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -15,4 +18,17 @@ export class FieldsController {
   async findAll() {
     return this.fieldsService.getAllFields();
   }
+  // src/modules/fields/fields.controller.ts
+
+@Get(':fieldId')
+async getFieldDetails(@Param('fieldId') fieldId: string) {
+  return this.fieldsService.findOne(fieldId);
+}
+@Post('select')
+@UseGuards(JwtAuthGuard)
+// Make sure it's @Request() req, NOT Request (the class)
+async selectField(@Request() req: any, @Body('fieldId') fieldId: string) { 
+  if (!fieldId) throw new BadRequestException('fieldId is required');
+  return this.fieldsService.selectField(req.user.userId, fieldId);
+}
 }

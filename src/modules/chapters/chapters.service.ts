@@ -2,40 +2,45 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Chapter } from './schemas/chapter.schema';
-import { Course } from '../courses/schemas/course.schema'; // Add this
-import { ProfilingService } from '../profiling/profiling.service'; // Add this
-import { CreateChapterDto } from './dto/create-chapter.dto';
 
 @Injectable()
 export class ChaptersService {
   constructor(
     @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
-    @InjectModel(Course.name) private courseModel: Model<Course>, // Inject Course
-    private readonly profilingService: ProfilingService, // Inject Profiling
   ) {}
 
-  async create(createChapterDto: CreateChapterDto) {
-    const newChapter = new this.chapterModel(createChapterDto);
-    return newChapter.save();
+  // POST /chapters?courseId=...
+  async create(courseId: string, data: any) {
+    return this.chapterModel.create({ ...data, courseId });
   }
 
-  async findAllByCourse(courseId: string) {
+  // GET /chapters?courseId=...
+  async findByCourse(courseId: string) {
     return this.chapterModel.find({ courseId }).sort({ order: 1 }).exec();
   }
-// src/modules/chapters/chapters.service.ts
 
-async findMyChapters(userId: string) {
-  // 1. Get the user's field from the profile
-  const fieldId = await this.profilingService.getFieldIdByUserId(userId);
+  // GET /chapters/:chapterId
+  async findOne(id: string) {
+    const chapter = await this.chapterModel.findById(id).populate('courseId', 'title').exec();
+    if (!chapter) throw new NotFoundException('Chapter not found');
+    return chapter;
+  }
 
-  // 2. Find all courses belonging to that field
-  const courses = await this.courseModel.find({ fieldId }).select('_id').exec();
-  const courseIds = courses.map(course => course._id);
+  // src/modules/chapters/chapters.service.ts
+async addContent(chapterId: string, contentData: any) {
+  const updated = await this.chapterModel.findByIdAndUpdate(
+    chapterId,
+    { $push: { content: contentData } },
+    { returnDocument: 'after' }
+  );
+  if (!updated) throw new NotFoundException('Chapter not found');
+  return updated.content;
+}
 
-  // 3. Find chapters and POPULATE the course details
-  return this.chapterModel
-    .find({ courseId: { $in: courseIds } })
-    .populate('courseId', 'title') // 👈 This adds the Course Title to the result
-    .sort({ order: 1 }) // Keep them in order
-    .exec();
-}}
+async getContents(chapterId: string) {
+  const chapter = await this.chapterModel.findById(chapterId).select('content').exec();
+  if (!chapter) throw new NotFoundException('Chapter not found');
+  return chapter.content;
+}
+
+}

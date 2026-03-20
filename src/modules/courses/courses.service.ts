@@ -1,6 +1,5 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ProfilingService } from '../profiling/profiling.service';
 import { Model } from 'mongoose';
 import { Course } from './schemas/course.schema';
 
@@ -8,20 +7,22 @@ import { Course } from './schemas/course.schema';
 export class CoursesService {
   constructor(
     @InjectModel(Course.name) private courseModel: Model<Course>,
-    @Inject(forwardRef(() => ProfilingService))
-    private readonly profilingService: ProfilingService, // Inject Profiling here
   ) {}
 
-  async create(data: any) {
-    return this.courseModel.create(data);
+  // POST /courses?fieldId=...
+  async create(fieldId: string, data: any) {
+    return this.courseModel.create({ ...data, fieldId });
   }
 
+  // GET /courses?fieldId=...
   async findByField(fieldId: string) {
     return this.courseModel.find({ fieldId, isActive: true }).exec();
   }
-  // Inject ProfilingService in the constructor first
-async findMyCourses(userId: string) {
-  const fieldId = await this.profilingService.getFieldIdByUserId(userId);
-  return this.courseModel.find({ fieldId }).exec();
-}
+
+  // GET /courses/:courseId
+  async findOne(id: string) {
+    const course = await this.courseModel.findById(id).exec();
+    if (!course) throw new NotFoundException('Course not found');
+    return course;
+  }
 }

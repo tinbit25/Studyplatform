@@ -1,16 +1,22 @@
+// src/modules/assessment/assessment.module.ts
+
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AssessmentService } from './assessment.service';
 import { AssessmentController } from './assessment.controller';
+import { AssessmentService } from './assessment.service';
 import { Assessment, AssessmentSchema } from './schemas/assessment.schema';
-import { EventsModule } from '../events/events.module'; // Added this
+import { Course, CourseSchema } from '../courses/schemas/course.schema'; // 1. Import Course
+import { EventsModule } from '../events/events.module';
+import { ProfilingModule } from '../profiling/profiling.module';
 
 @Module({
   imports: [
-    // 1. Register the Schema so "AssessmentModel" is available
-    MongooseModule.forFeature([{ name: Assessment.name, schema: AssessmentSchema }]),
-    // 2. Import EventsModule so AssessmentService can use EventsService
-    EventsModule 
+    MongooseModule.forFeature([
+      { name: Assessment.name, schema: AssessmentSchema },
+      { name: Course.name, schema: CourseSchema }, // 2. Add this line!
+    ]),
+    EventsModule,
+    ProfilingModule,
   ],
   controllers: [AssessmentController],
   providers: [AssessmentService],

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { StudyProfile } from './schemas/study-profile.schema';
 import { EventsService } from '../events/events.service';
 import { CoursesService } from '../courses/courses.service'; // 1. Ensure this is imported
@@ -52,12 +52,35 @@ async getFullUserData(userId: string) {
   async createProfile(userId: string, data: any) { // Ensure this name is correct
     return await this.profileModel.create({ userId, ...data });
   }
-  async createOrUpdate(userId: string, data: any) {
-  // Use findOneAndUpdate with 'upsert: true' to handle both creation and updates
-  return await this.profileModel.findOneAndUpdate(
-    { userId }, 
-    { $set: data }, 
-    { new: true, upsert: true }
-  ).exec();
+// src/modules/profiling/profiling.service.ts
+
+async createOrUpdate(userId: string, createDto: any) {
+  try {
+    return await this.profileModel.findOneAndUpdate(
+      { userId }, 
+      { ...createDto, userId }, 
+      { 
+        upsert: true,   
+        runValidators: true,
+        returnDocument: 'after', // 👈 Modern way to return the updated doc
+        setDefaultsOnInsert: true 
+      }
+    ).exec();
+  } catch (error) {
+    if (error.code === 11000) {
+      return this.profileModel.findOne({ userId }).exec();
+    }
+    throw error;
+  }
 }
+
+// Add this method to your existing ProfilingService
+async getFieldIdByUserId(userId: string): Promise<Types.ObjectId> {
+  const profile = await this.profileModel.findOne({ userId }).exec();
+  if (!profile || !profile.fieldId) {
+    throw new NotFoundException('Profile or selected field not found');
+  }
+  return profile.fieldId;
+}
+
 }

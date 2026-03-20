@@ -13,13 +13,11 @@ async function bootstrap() {
 
   await app.register(helmet);
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
+ app.useGlobalPipes(new ValidationPipe({
+  whitelist: true,
+  forbidNonWhitelisted: true,
+  transform: true, // This helps transform types
+}));
 
   await app.listen(3000, '0.0.0.0');
 }

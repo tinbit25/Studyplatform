@@ -1,12 +1,15 @@
-import { IsString, IsNotEmpty, IsMongoId, IsNumber, IsArray, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsArray, IsOptional, Matches } from 'class-validator';
 
 export class CreateChapterDto {
   @IsString()
   @IsNotEmpty()
   title: string;
 
-  @IsMongoId()
   @IsNotEmpty()
+  // ⚡ This Regex replaces @IsMongoId() and forces a strict 24-character check
+  @Matches(/^[0-9a-fA-F]{24}$/, {
+    message: 'courseId must be a valid 24-character hexadecimal string',
+  })
   courseId: string;
 
   @IsNumber()

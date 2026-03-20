@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProfilingService } from './profiling.service';
 import { ProfilingController } from './profiling.controller';
@@ -10,9 +10,10 @@ import { CoursesModule } from '../courses/courses.module'; // Add this import
   imports: [
     MongooseModule.forFeature([{ name: StudyProfile.name, schema: StudyProfileSchema }]),
     EventsModule, // Register here
-    CoursesModule, // Register here
+    forwardRef(() => CoursesModule),
   ],
   controllers: [ProfilingController],
   providers: [ProfilingService],
+  exports: [ProfilingService],
 })
 export class ProfilingModule {}
